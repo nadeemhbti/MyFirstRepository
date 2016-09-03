@@ -1,0 +1,590 @@
+<!doctype html>
+<html>
+<head>
+    <title>Monitor Mode HTML / CSS</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link href="../tri_css/KMmonitormode_style.css" rel="stylesheet" type="text/css">
+    <link href="../tri_css/jquery_ui_1_11_4.custom.css" rel="stylesheet">
+    <link href="../tri_css/KMpersonalize_style.css" rel="stylesheet" type="text/css">
+    <link href="../tri_css/KMbootstrap.css" rel="stylesheet" type="text/css">
+    <script src="../tri_scripts/jquery_1_12_1min.js" type="text/javascript"> </script>
+    <script src="../tri_scripts/jquery_ui_1_11_4.custom.js" type="text/javascript"></script>
+    <script src="../tri_scripts/KM.bootstrap.js" type="text/javascript"> </script>
+    <script src="../tri_scripts/SDK.REST.js" type="text/javascript"></script>
+    <script src="../tri_scripts/xrmservicetoolkit.js" type="text/javascript"></script>
+    <script src="../tri_scripts/SDK.JQuery.js" type="text/javascript"> </script>
+    <script src="../tri_scripts/KM.monitormode.js" type="text/javascript"> </script>
+    <script src="../ClientGlobalContext.js.aspx" type="text/javascript"></script>
+    <script src="../tri_scripts/kendo.js"></script>
+    <script src="../tri_scripts/linq.js"></script>
+    <script src="../tri_scripts/PatientMonitorModeVersion2.js"></script>
+
+    <!-- styling just for the table header-->
+    <style type="text/css">
+        .tg {
+            border-collapse: collapse;
+            border-spacing: 0;
+            border-color: #aabcfe;
+            width: 100%;
+        }
+            /*.tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#aabcfe;color:#669;background-color:#e8edff;}*/
+            .tg th {
+                font-family: Arial, sans-serif;
+                font-size: 14px;
+                font-weight: normal;
+                padding: 8px 2px;
+                border-style: solid;
+                border-width: 1px;
+                overflow: hidden;
+                word-break: normal;
+                border-color: #aabcfe;
+                color: #039;
+                background-color: #f0f5f5;
+            }
+
+            .tg .tg-typedetail {
+                text-align: left;
+                vertical-align: top;
+                width: 30%;
+                min-width: 160px;
+            }
+
+            .tg .tg-target {
+                vertical-align: top;
+                width: 22%;
+                min-width: 110px;
+                text-align: center;
+            }
+
+            .tg .tg-LastResult {
+                vertical-align: top;
+                width: 22%;
+                min-width: 110px;
+                text-align: center;
+            }
+
+            .tg .tg-lastresultdate {
+                vertical-align: top;
+                width: 10%;
+                min-width: 40px;
+                text-align: center;
+            }
+
+            .tg .tg-duedate {
+                vertical-align: top;
+                width: 10%;
+                min-width: 40px;
+                text-align: center;
+            }
+
+            .tg .tg-more {
+                vertical-align: top;
+                width: 4%;
+                min-width: 20px;
+                text-align: center;
+            }
+    </style>
+
+</head>
+<body>
+    <div style="float: left;margin-bottom:20px;"><img src="../tri_imgs/logo_dh_small.png" /></div>
+    <div class="main-wrapper" style="clear:both;">
+        <div id="planFilter" class="btn-group" style="width: 70%;">
+            <div style="min-width: 100px; width: auto; padding: 3px; max-width: 90%; min-width: 50px; min-height: 35px" type="button" class="btn btn-default dropdown-toggle planFilterbutton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></div>
+            <ul class="dropdown-menu planFilterdropdownmenu" style="height: 200px; overflow-y: scroll !important;"></ul>
+            <button class="btn btn-primary" type="button" id="btnFilterRefresh" style="margin-left:5px;">Refresh</button>
+        </div>
+        <div class="monitor-wrapper">
+            
+            <div style="display: inline;">
+            <button class="btn btn-primary" type="button" onclick="return gotoAddCarePlan();" style="float:right;"><img src="../tri_imgs/KM.addcareplan.png"> Add Plans / Personalize </button>
+            </div>
+            <br /><br />
+
+            <table class="tg">
+                <tr>
+                    <th class="tg-typedetail">Type & Detail</th>
+                    <th class="tg-target">Target</th>
+                    <th class="tg-LastResult">Last Result</th>
+                    <th class="tg-lastresultdate">Last Result Date</th>
+                    <th class="tg-duedate">Next Due Date</th>
+                    <th class="tg-more">More</th>
+                </tr>
+            </table>
+            <br />
+            <!-- START ITEM 1 (Symptoms) -->
+            <!-- Indicators + Section Title -->
+
+            <div class="indicator-wrapper_symptoms">
+
+                <div class="indicator-box-big_symptoms_all blue allactive"></div>
+                <div class="indicator-box-small_symptoms_red red"></div>
+                <div class="indicator-box-small_symptoms_orange orange"></div>
+                <div class="indicator-box-small_symptoms_green green"></div>
+                <div class="indicator-box-small_symptoms_grey grey"></div>
+                <div class="sectiontitle_monitor bluetxt">Symptoms</div>
+
+                <div class="indicator-line_symptoms blue"></div>
+            </div>
+
+            <!-- Section Content -->
+
+            <div class="tablecontent_symptoms_all">
+                <table class="maintable_symptoms_all" align="center"></table>
+            </div>
+            <div class="tablecontent_symptoms_red">
+                <table class="maintable_symptoms_red" align="center"></table>
+            </div>
+            <div class="tablecontent_symptoms_orange">
+                <table class="maintable_symptoms_orange" align="center"></table>
+            </div>
+            <div class="tablecontent_symptoms_green">
+                <table class="maintable_symptoms_green" align="center"></table>
+            </div>
+            <div class="tablecontent_symptoms_grey">
+                <table class="maintable_symptoms_grey" align="center"></table>
+            </div>
+
+            <br>
+            <!-- END ITEM 1 (Symptoms) -->
+            <div class="indicator-wrapper_testscare">
+
+                <div class="indicator-box-big_testcare_all blue allactive"></div>
+                <div class="indicator-box-small_testcare_red red"></div>
+                <div class="indicator-box-small_testcare_orange orange"></div>
+                <div class="indicator-box-small_testcare_green green"></div>
+                <div class="indicator-box-small_testcare_grey grey"></div>
+                <div class="sectiontitle_monitor bluetxt">Tests/Care</div><br />
+
+                <div class="indicator-line_testcare blue"></div>
+            </div>
+
+            <!-- Section Content -->
+
+            <div class="tablecontent_testcare_all">
+                <table class="maintable_testcare_all" align="center"></table>
+            </div>
+            <div class="tablecontent_testcare_red">
+                <table class="maintable_testcare_red" align="center"></table>
+            </div>
+            <div class="tablecontent_testcare_orange">
+                <table class="maintable_testcare_orange" align="center"></table>
+            </div>
+            <div class="tablecontent_testcare_green">
+                <table class="maintable_testcare_green" align="center"></table>
+            </div>
+            <div class="tablecontent_testcare_grey">
+                <table class="maintable_testcare_grey" align="center"></table>
+            </div>
+
+            <br>
+            <!-- end testcare -->
+            <div class="indicator-wrapper_vitals">
+
+                <div class="indicator-box-big_vitals_all blue allactive"></div>
+                <div class="indicator-box-small_vitals_red red"></div>
+                <div class="indicator-box-small_vitals_orange orange"></div>
+                <div class="indicator-box-small_vitals_green green"></div>
+                <div class="indicator-box-small_vitals_grey grey"></div>
+                <div class="sectiontitle_monitor bluetxt">Home Vitals</div>
+
+                <div class="indicator-line_vitals blue"></div>
+            </div>
+
+            <!-- Section Content -->
+
+            <div class="tablecontent_vitals_all">
+                <table class="maintable_vitals_all" align="center"></table>
+            </div>
+            <div class="tablecontent_vitals_red">
+                <table class="maintable_vitals_red" align="center"></table>
+            </div>
+            <div class="tablecontent_vitals_orange">
+                <table class="maintable_vitals_orange" align="center"></table>
+            </div>
+            <div class="tablecontent_vitals_green">
+                <table class="maintable_vitals_green" align="center"></table>
+            </div>
+            <div class="tablecontent_vitals_grey">
+                <table class="maintable_vitals_grey" align="center"></table>
+            </div>
+
+            <br>
+            <!--  -->
+            <div class="indicator-wrapper_medications">
+
+                <div class="indicator-box-big_medications_all blue allactive"></div>
+                <div class="indicator-box-small_medications_red red"></div>
+                <div class="indicator-box-small_medications_orange orange"></div>
+                <div class="indicator-box-small_medications_green green"></div>
+                <div class="indicator-box-small_medications_grey grey"></div>
+                <div class="sectiontitle_monitor bluetxt">Medications</div><br />
+
+                <div class="indicator-line_medications blue"></div>
+            </div>
+
+            <!-- Section Content -->
+
+            <div class="tablecontent_medications_all">
+                <table class="maintable_medications_all" align="center"></table>
+            </div>
+            <div class="tablecontent_medications_red">
+                <table class="maintable_medications_red" align="center"></table>
+            </div>
+            <div class="tablecontent_medications_orange">
+                <table class="maintable_medications_orange" align="center"></table>
+            </div>
+            <div class="tablecontent_medications_green">
+                <table class="maintable_medications_green" align="center"></table>
+            </div>
+            <div class="tablecontent_medications_grey">
+                <table class="maintable_medications_grey" align="center"></table>
+            </div>
+
+            <br>
+            <!--  -->
+            <div class="indicator-wrapper_activity">
+
+                <div class="indicator-box-big_activity_all blue allactive"></div>
+                <div class="indicator-box-small_activity_red red"></div>
+                <div class="indicator-box-small_activity_orange orange"></div>
+                <div class="indicator-box-small_activity_green green"></div>
+                <div class="indicator-box-small_activity_grey grey"></div>
+                <div class="sectiontitle_monitor bluetxt">Activity</div>
+
+                <div class="indicator-line_activity blue"></div>
+            </div>
+
+            <!-- Section Content -->
+
+            <div class="tablecontent_activity_all">
+                <table class="maintable_activity_all" align="center"></table>
+            </div>
+            <div class="tablecontent_activity_red">
+                <table class="maintable_activity_red" align="center"></table>
+            </div>
+            <div class="tablecontent_activity_orange">
+                <table class="maintable_activity_orange" align="center"></table>
+            </div>
+            <div class="tablecontent_activity_green">
+                <table class="maintable_activity_green" align="center"></table>
+            </div>
+            <div class="tablecontent_activity_grey">
+                <table class="maintable_activity_grey" align="center"></table>
+            </div>
+
+            <br>
+            <!--  -->
+            <div class="indicator-wrapper_nutrition">
+
+                <div class="indicator-box-big_nutrition_all blue allactive"></div>
+                <div class="indicator-box-small_nutrition_red red"></div>
+                <div class="indicator-box-small_nutrition_orange orange"></div>
+                <div class="indicator-box-small_nutrition_green green"></div>
+                <div class="indicator-box-small_nutrition_grey grey"></div>
+                <div class="sectiontitle_monitor bluetxt">Nutrition</div>
+
+                <div class="indicator-line_nutrition blue"></div>
+            </div>
+
+            <!-- Section Content -->
+
+            <div class="tablecontent_nutrition_all">
+                <table class="maintable_nutrition_all" align="center"></table>
+            </div>
+            <div class="tablecontent_nutrition_red">
+                <table class="maintable_nutrition_red" align="center"></table>
+            </div>
+            <div class="tablecontent_nutrition_orange">
+                <table class="maintable_nutrition_orange" align="center"></table>
+            </div>
+            <div class="tablecontent_nutrition_green">
+                <table class="maintable_nutrition_green" align="center"></table>
+            </div>
+            <div class="tablecontent_nutrition_grey">
+                <table class="maintable_nutrition_grey" align="center"></table>
+            </div>
+
+            <br>
+            <!--  -->
+            <div class="indicator-wrapper_psychosocial">
+
+                <div class="indicator-box-big_psychosocial_all blue allactive"></div>
+                <div class="indicator-box-small_psychosocial_red red"></div>
+                <div class="indicator-box-small_psychosocial_orange orange"></div>
+                <div class="indicator-box-small_psychosocial_green green"></div>
+                <div class="indicator-box-small_psychosocial_grey grey"></div>
+                <div class="sectiontitle_monitor bluetxt">Psycho-Social/Behavioral Health</div>
+
+                <div class="indicator-line_psychosocial blue"></div>
+            </div>
+
+            <!-- Section Content -->
+
+            <div class="tablecontent_psychosocial_all">
+                <table class="maintable_psychosocial_all" align="center"></table>
+            </div>
+            <div class="tablecontent_psychosocial_red">
+                <table class="maintable_psychosocial_red" align="center"></table>
+            </div>
+            <div class="tablecontent_psychosocial_orange">
+                <table class="maintable_psychosocial_orange" align="center"></table>
+            </div>
+            <div class="tablecontent_psychosocial_green">
+                <table class="maintable_psychosocial_green" align="center"></table>
+            </div>
+            <div class="tablecontent_psychosocial_grey">
+                <table class="maintable_psychosocial_grey" align="center"></table>
+            </div>
+
+            <br>
+            <!--  -->
+            <div class="indicator-wrapper_wrapup">
+
+                <div class="indicator-box-big_wrapup_all blue allactive"></div>
+                <div class="indicator-box-small_wrapup_red red"></div>
+                <div class="indicator-box-small_wrapup_orange orange"></div>
+                <div class="indicator-box-small_wrapup_green green"></div>
+                <div class="indicator-box-small_wrapup_grey grey"></div>
+                <div class="sectiontitle_monitor bluetxt">Wrap-Up</div>
+
+                <div class="indicator-line_wrapup blue"></div>
+            </div>
+
+            <!-- Section Content -->
+
+            <div class="tablecontent_wrapup_all">
+                <table class="maintable_wrapup_all" align="center"></table>
+            </div>
+            <div class="tablecontent_wrapup_red">
+                <table class="maintable_wrapup_red" align="center"></table>
+            </div>
+            <div class="tablecontent_wrapup_orange">
+                <table class="maintable_wrapup_orange" align="center"></table>
+            </div>
+            <div class="tablecontent_wrapup_green">
+                <table class="maintable_wrapup_green" align="center"></table>
+            </div>
+            <div class="tablecontent_wrapup_grey">
+                <table class="maintable_wrapup_grey" align="center"></table>
+            </div>
+
+            <br>
+        </div>
+
+        <div class="window-wrapper">
+            <div style="float:right;height:40px;">
+                <!-- Save Changes -->
+                <button class="btn btn-primary savebtn_prsnlize1" style="margin-right:5px;" type="button">Save Changes</button>
+                <!-- X-CLOSE -->
+                <button type="button" class="btn btn-primary" id="windowwrapperclose" style="float:right;">Cancel</button><br /><br />
+            </div>
+            <!-- FLAG + Title -->
+            <div class="indicator-wrapper">
+
+                <!--<div style="height:30px;padding:5px;" class="flag-box-big blue"> <br> </div>-->
+
+                <div class="sectiontitle_personalize"></div>
+                <div class="indicator-line blue">
+                </div>
+                <!-- Section Content -->
+                <!-- LAST RESULT -->
+                <div class="tablecontent">
+                    <table class="maintable" align="center">
+                        <tr>
+                            <td class="label-name">
+                                Last Result:
+                            </td>
+                            <!--<td class="result-1" id="lastresult_personalize"></td>-->
+                            <td class="result-1">
+                                <input type="text" class="txtfield" disabled="disabled" id="lastresult_personalize" style="background-color: #FAFAFA;display:none;">
+                                <input type="text" class="txtfield" disabled="disabled" id="qualLastresult_personalize" style="background-color: #FAFAFA;display:none;">
+                            </td>
+
+                            <!--</tr>
+                            </table>-->
+                            <!-- RESULT SOURCE -->
+                            <!--<table class="maintable" align="center">
+                                <tr>
+                                    <td class="label-name">Result Source:</td>
+                                    <td class="result-1" id="resultsource_personalize"></td>
+                                </tr>
+                            </table>-->
+                            <!-- DATES -->
+                            <!--<table class="maintable" align="center">
+                                <tr>-->
+                            <td class="label-name"> Last Result Date:</td>
+                            <td class="result-1"><input type="text" disabled="disabled" class="txtfield" id="lastresultdate_personalize"></td>
+                            <td class="label-name"> Next Due Date:</td>
+                            <td class="result-1"><input type="text" class="txtfield" id="nextresultdate_personalize"></td>
+                            <td class="label-name"> Goal State:</td>
+                            <td class="labelcenter">
+                                <div class="btn-group" style="width: 90px;">
+                                    <button type="button" class="btn btn-default dropdown-toggle personalizegoalbutton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span class="caret"></span></button>
+                                    <ul class="dropdown-menu personalizegoalUL" id="_ULPRNLGOAL">
+                                        <li role="presentation" class="dropdown-header" id="ULPRNLGOAL_OPEN">Open</li>
+                                        <li role="presentation" class="dropdown-header" id="ULPRNLGOAL_MET">Met</li>
+                                        <li role="presentation" class="dropdown-header" id="ULPRNLGOAL_NOTMET">Not Met</li>
+                                        <li role="presentation" class="dropdown-header" id="ULPRNLGOAL_CLOSED">Closed, Cancelled</li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    <br>
+                    <!-- FACTORS & VALUES -->
+                    <table class="maintable" align="left">
+                        <tr>
+                            <td class="labelcenter" width="270px">Factor / Modifier:</td>
+                            <td class="labelcenter" width="600px"> Target Value:</td>
+                            <td class="labelcenter" width="220px"> In Range Frequency:</td>
+                            <td class="labelcenter" width="220px"> Out of Range Frequency:<br></td>
+                        </tr>
+                        <tr class="factors" align="left">
+                            <td class="labelcenter" style="width:90px; padding-right:20px;" colspan="4">
+                                <!-- FACTOR DROP-DOWN -->
+                                <div class="btn-group" style="width: 90px;">
+                                    <button type="button" class="btn btn-default dropdown-toggle personalizemodifierbutton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span class="caret"></span></button>
+                                    <ul class="dropdown-menu personalizedropdownmenu">
+                                        <!--<li role="presentation" class="dropdown-header">18-25</li>
+                                        <li role="presentation" class="dropdown-header">15-18</li>-->
+                                    </ul>
+                                </div>
+
+                            </td>
+                        </tr>
+                        <tr class="factors" align="left">
+                            <td width="270px">
+                            <td class="labelcenter" width="600px">
+                                <!--<table align="center"><tr><td>-->
+                                <!-- MODIFIER DROP-DOWN -->
+                                <span class="personalizequantitative">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default dropdown-toggle personalizeoperatorOne" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <span class="caret"></span>
+                                        </button>
+                                    </div>
+                                    <input type="text" class="txtfield personalizetargetvalMetric" style="width:50px;text-align: left; padding-left: 10px; display:inline">
+                                    <p class="personalizerangeAnd" style="display:inline;"> And </p>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default dropdown-toggle personalizeoperatorTwo" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="display:inline">
+                                            <span class="caret"></span>
+                                        </button>
+                                    </div>
+                                    <input type="text" class="txtfield personalizetargetvalMetricTwo" style="width:50px;text-align: left; padding-left: 10px;display:inline;">
+                                </span>
+                                <span class="personalizequalitative"><input type="text" class="txtfield personalizetargetvalQual" style="width:450px;text-align: left; padding-left: 10px;"></span>
+                            </td>
+                            <td width="220px">
+                                <input type="text" class="txtfieldquantitative personalizenormalmultiplier" style="width:45px;">
+                                <!-- MODIFIER DROP-DOWN -->
+                                <div class="btn-group" style="width:60px;">
+                                    <button type="button" class="btn btn-default dropdown-toggle personalizerecurrnormal" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></button>
+                                    <ul class="dropdown-menu personalizeULnormalrecurr">
+                                        <li role="presentation" class="dropdown-header">Day</li>
+                                        <li role="presentation" class="dropdown-header">Week</li>
+                                        <li role="presentation" class="dropdown-header">Month</li>
+                                        <li role="presentation" class="dropdown-header">Quarter</li>
+                                        <li role="presentation" class="dropdown-header">Year</li>
+                                        <li role="presentation" class="dropdown-header">Every Encounter</li>
+                                    </ul>
+                                </div>
+                            </td>
+                            <td width="220px">
+                                <input type="text" class="txtfieldquantitative personalizeabnormalmultiplier" style="width:45px;">
+                                <!-- MODIFIER DROP-DOWN -->
+                                <div class="btn-group" style="width:60px;">
+                                    <button type="button" class="btn btn-default dropdown-toggle personalizerecurrabnormal" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></button>
+                                    <ul class="dropdown-menu personalizeULabnormalrecurr">
+                                        <li role="presentation" class="dropdown-header">Day</li>
+                                        <li role="presentation" class="dropdown-header">Week</li>
+                                        <li role="presentation" class="dropdown-header">Month</li>
+                                        <li role="presentation" class="dropdown-header">Quarter</li>
+                                        <li role="presentation" class="dropdown-header">Year</li>
+                                        <li role="presentation" class="dropdown-header">Every Encounter</li>
+                                    </ul>
+                                </div>
+                                <br>
+                            </td>
+                        </tr>
+                    </table>
+                    <br>
+                    <table class="factors" align="left" id="tbl_ObservedValue" style="display:none;">
+                        <tr>
+                            <td class="labelcenter" width="270px"></td>
+                            <td class="labelcenter" width="600px">Observed Value:</td>
+                            <td class="labelcenter" width="220px"></td>
+                            <td class="labelcenter" width="220px"></td>
+                        </tr>
+                        <!--</table>
+                        <table class="factors" align="center">-->
+                        <tr>
+                            <td class="labelcenter" width="270px">
+                            <td class="labelcenter" width="600px">
+                                <span class="personalizequalitative"><input type="text" id="observedValue" class="txtfield" style="width:450px;text-align: left; padding-left: 10px;"></span>
+                            </td>
+                            <td class="labelcenter" width="220px"></td>
+                            <td class="labelcenter" width="220px"></td>
+                        </tr>
+                    </table>
+                    <!-- DESCRIPTION & ASSIGNMENT ROLE -->
+                    <table class="factors" align="left">
+                        <tr>
+                            <td class="label-name" style="width:600px">Trigger Description:</td>
+                            <!-- <td class="label-name" style="width:175px">Assignment Role:</td>-->
+                        </tr>
+                        <tr class="label-name"></tr>
+                        <tr class="" align="left">
+                            <td style="width:900px; padding-left:10px; padding-right: 0px;" colspan="4">
+                                <input type="text" class="txtfield personalizetriggeraction" style="width:900px;text-align: left; padding-left: 10px;background-color:#FAFAFA">
+                            </td>
+                        </tr>
+                    </table>
+                </div><br>
+            </div>
+        </div>
+
+        <!-- BackToTop Button -->
+        <!--<a href="javascript:void(0);" id="scroll" title="Scroll to Top" style="display: none;">Top<span></span></a>-->
+
+        <div class="personalize-section">
+            <!--<div>
+                <span style="color: #333333; font-size: 18px; text-align: left;"><h4>Select the Care Plan you want to add:</h4></span>
+            </div>-->
+            <div class="carePathDropdown">
+                <input class="txtfield" id="carePaths" style="width: 600px;" />
+            </div>
+            <div style="float:right;height:40px;">
+                <button class="btn btn-primary savebtn" style="margin-right:5px;" type="button">Save Changes</button>
+                <button type="button" class="btn btn-primary" id="closepersonalizewindow" style="float:right;">Cancel</button><br />
+            </div>
+            </div><br />
+
+        <div class="Personalize-details">
+
+
+
+
+        </div>
+
+    </div>
+    <div class="alert-wrapper" id="alert-wrapper" style="display:none;">
+        <!-- ALERT Body -->
+        <div class="alert" style="text-align:center; margin: 0 auto;">
+            <strong>Acknowledgment</strong><br><br>
+            By changing this flag, result, factor or frequency you agree to follow your <span style="text-decoration:underline">Company Policy</span><br>
+        </div>
+        <!-- CANCEL / OK buttons -->
+        <div class="greybtn-alert">CANCEL</div><div class="bluebtn-alert">OK</div>
+    </div>
+    <div class="alert-wrapper" id="snooze-wrapper" style="display:none;">
+        <!-- ALERT Body -->
+        <div class="alert" style="text-align:center; margin: 0 auto;">
+            <strong>Snooze CMS Plans</strong><br><br>
+            Please provide snooze days for all Care Management Schedule Plans : <input class="txtfield" id="snoozedays" value="0" style="width: 60px;" /> <br>
+        </div>
+        <!-- CANCEL / OK buttons -->
+        <div id="snoozewrapperCancel" class="greybtn-alert">CANCEL</div><div id="snoozewrapperOk" class="bluebtn-alert">OK</div>
+    </div>
+</body>
+</html>
