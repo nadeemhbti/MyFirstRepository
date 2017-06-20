@@ -1,4 +1,3 @@
-//Updated Dev Branch
 var joinEntityCollection = null;
 var CPGoalSymptomsAll = null;
 var tagCPGoalSymptomsAll = "";
